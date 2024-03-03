@@ -16,13 +16,10 @@ bot.command('quit', async ctx => {
 
 bot.on(message('text'), async ctx => {
   // Explicit usage
-  await ctx.telegram.sendMessage(
-    ctx.message.chat.id,
-    `Hello ${ctx.state.role}`,
-  );
-
+  await ctx.telegram.sendMessage(ctx.message.chat.id, `Hello Tina`);
+  //   console.log(ctx);
   // Using context shortcut
-  await ctx.reply(`Hello ${ctx.state.role}`);
+  //   await ctx.reply(`Hello ${ctx.state.role}`);
 });
 
 bot.on('callback_query', async ctx => {
