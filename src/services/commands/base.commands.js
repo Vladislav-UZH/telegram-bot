@@ -1,0 +1,4 @@
+class BaseCommands {
+
+  async  register()
+}
