@@ -19,9 +19,6 @@ class Bot {
 const bot = new Bot(BOT_TOKEN).bot;
 
 bot.command('quit', async ctx => {
-  // Explicit usage
-  await ctx.telegram.leaveChat(ctx.message.chat.id);
-
   // Using context shortcut
   await ctx.leaveChat();
 });
@@ -54,9 +51,24 @@ bot.command('quit', async ctx => {
 //   await ctx.answerInlineQuery(result);
 // });
 
-bot.command('src', async ctx => {
+bot.command('start', async ctx => {
   await ctx.reply('Hello there!');
 });
+
+bot.command('observe', async ctx => {
+  await ctx.reply('Start observing');
+});
+
+/**
+ * виб'є помилку, бо має передаватися тільки
+ * стрінг, число або буль
+ */
+
+// bot.command('inline', async ctx => {
+//   const result = [];
+//   await ctx.reply(result); // виб'є error
+// });
+
 bot.launch();
 
 // Enable graceful stop
