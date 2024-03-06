@@ -3,6 +3,10 @@ const { Telegraf, Telegram } = require('telegraf');
 const { message } = require('telegraf/filters');
 const config = require('./config/config');
 const BOT_TOKEN = config.BOT_TOKEN;
+const { BaseCommands } = require('./services/commands/base.commands');
+const { cronJob, CronJob } = require('cron');
+const { override } = require('joi');
+const { testObj } = require('./services/service');
 
 class Bot {
   constructor({ defaultCommands = {}, BOT_TOKEN }) {
@@ -49,19 +53,11 @@ const defaultCommands = { leave };
 const bot = new Bot({ defaultCommands, BOT_TOKEN }).instance;
 
 // console.log(bot.action('message'));
-(async () => {
-  // const poll = await bot.telegram.sendPoll(
-  //   -1002010719063,
-  //   'TEst poll',
-  //   ['one', 'two'],
-  //   {
-  //     is_anonymous: false,
-  //   },
-  // );
-  // console.log(poll);
-  // console.log(await bot.telegram.getUpdates(1000, 5, 10));
-  // console.log(await api.getChat(-1002010719063));
-})();
+bot.command('go', ctx => {
+  (async () => {
+    await ();
+  })();
+});
 
 bot.launch();
 
