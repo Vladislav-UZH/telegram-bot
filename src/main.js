@@ -1,73 +1,67 @@
 require('dotenv').config();
-const { Telegraf } = require('telegraf');
+const { Telegraf, Telegram } = require('telegraf');
 const { message } = require('telegraf/filters');
 const config = require('./config/config');
 const BOT_TOKEN = config.BOT_TOKEN;
 
 class Bot {
-  constructor(TOKEN) {
-    this.bot = new Telegraf(TOKEN);
+  constructor({ defaultCommands = {}, BOT_TOKEN }) {
+    this.instance = new Telegraf(BOT_TOKEN);
+    this.commands = defaultCommands;
+  }
+  getInstance() {
+    return this.instance;
   }
 
   async listen(event, listener) {
-    this.bot.on(event, listener);
+    this.instance.on(event, listener);
+  }
+
+  async _checkCommands(command) {
+    return new Promise((resolve, reject) => {
+      if (this.commands.includes(command)) {
+        return reject(`Entered command: "${command}" already exists`);
+      }
+      resolve(true);
+    });
+  }
+
+  async registerCommand(command = '', handler = '') {
+    try {
+      await this._checkCommands(command);
+      this.commands[command] = handler;
+    } catch (e) {
+      console.log(e);
+    }
   }
   start() {
-    this.bot.launch();
+    this.instance.launch();
   }
 }
-const bot = new Bot(BOT_TOKEN).bot;
 
-bot.command('quit', async ctx => {
+async function leave(ctx) {
+  await ctx.telegram.leaveChat(ctx.message.chat.id);
+
   // Using context shortcut
   await ctx.leaveChat();
-});
+}
+const defaultCommands = { leave };
+const bot = new Bot({ defaultCommands, BOT_TOKEN }).instance;
 
-// bot.on(message('text'), async ctx => {
-//   // Explicit usage
-
-//   console.log(ctx.message);
-
-//   await ctx.telegram.sendMessage(ctx.message.chat.id, `Hello Tina`);
-//   //   console.log(ctx);
-//   // Using context shortcut
-//   //   await ctx.reply(`Hello ${ctx.state.role}`);
-// });
-
-// bot.on('callback_query', async ctx => {
-//   // Explicit usage
-//   await ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
-
-//   // Using context shortcut
-//   await ctx.answerCbQuery();
-// });
-
-// bot.on('inline_query', async ctx => {
-//   const result = [];
-//   // Explicit usage
-//   await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
-
-//   // Using context shortcut
-//   await ctx.answerInlineQuery(result);
-// });
-
-bot.command('start', async ctx => {
-  await ctx.reply('Hello there!');
-});
-
-bot.command('observe', async ctx => {
-  await ctx.reply('Start observing');
-});
-
-/**
- * виб'є помилку, бо має передаватися тільки
- * стрінг, число або буль
- */
-
-// bot.command('inline', async ctx => {
-//   const result = [];
-//   await ctx.reply(result); // виб'є error
-// });
+// console.log(bot.action('message'));
+(async () => {
+  // const poll = await bot.telegram.sendPoll(
+  //   -1002010719063,
+  //   'TEst poll',
+  //   ['one', 'two'],
+  //   {
+  //     is_anonymous: false,
+  //   },
+  // );
+  // console.log(poll);
+  // console.log(await bot.telegram.getUpdates(1000, 5, 10));
+  // console.log(await api.getChat(-1002010719063));
+})();
 
 bot.launch();
 
