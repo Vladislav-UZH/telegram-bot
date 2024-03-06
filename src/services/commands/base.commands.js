@@ -1,7 +1,9 @@
 class BaseCommands {
-  async register() {}
+  constructor() {}
 
-  async startObserving() {}
+  async observe() {}
 
-  async getInfo() {}
+  async info() {}
 }
+
+module.exports = new BaseCommands();
