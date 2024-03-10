@@ -43,4 +43,4 @@ class Bot {
   }
 }
 
-module.exports = { bot: new Bot({ BOT_TOKEN }) };
+// module.exports = { bot: new Bot({ BOT_TOKEN }) };

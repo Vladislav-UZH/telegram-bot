@@ -1,4 +1,5 @@
 const { CronJob } = require('cron');
+const { bot } = require('../main');
 
 class Service {
   startCron(handler, cronTime = '') {
@@ -16,14 +17,11 @@ class Service {
     this.startCron(handler, '1 * * * * *');
   }
 
-  async startVote() {
-    const test = () => {
-      console.log('test');
-    };
-    this.pollCron(test);
+  async createPoll(action, callback) {
+    await bot.on(action, callback);
   }
 }
 
-const testObj = new Service();
+const service = new Service();
 
-module.exports = { testObj };
+module.exports = { service };

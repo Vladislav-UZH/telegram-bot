@@ -9,4 +9,4 @@ class BaseCommands {
   async info() {}
 }
 
-module.exports = new BaseCommands();
+// module.exports = new BaseCommands();
