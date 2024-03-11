@@ -1,7 +1,8 @@
 const { CronJob } = require('cron');
-const { bot } = require('../main');
+// const { bot } = require('../main');
 
 class Service {
+  // ObjectCron
   startCron(handler, cronTime = '') {
     const job = new CronJob.from({
       cronTime,
@@ -13,12 +14,24 @@ class Service {
     return job;
   }
 
+  // nonObjCron
+  // startCron(handler, cronTime = '') {
+  //   const job = new CronJob(
+  //     cronTime,
+  //     handler,
+  //     null,
+  //     true,
+  //     'America/Los_Angeles',
+  //   );
+  //   return job;
+  // }
+
   pollCron(handler) {
     this.startCron(handler, '1 * * * * *');
   }
 
-  async createPoll(action, callback) {
-    await bot.on(action, callback);
+  async createPoll(context) {
+    await context;
   }
 }
 
