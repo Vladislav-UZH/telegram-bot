@@ -8,14 +8,14 @@ const bot = new Telegraf(BOT_TOKEN);
 
 // With Cron & interval
 bot.command('startCreatingPolls', ctx => {
-  service.pollCron(
-    service.pollInterval(() =>
-      service.createPoll(
-        ctx.telegram.sendPoll(ctx.message.chat.id, 'test', ['1', '2']),
-      ),
-    ),
-  );
+  // service.startCron(() =>
+  service.createPollsForShedule(ctx);
+  // );
 });
+
+// bot.command('getPollsResults', async ctx => {
+//   console.log(await ctx.message.chat.(-1002010719063));
+// });
 
 // bot.command('stopCreatingPolls', ctx => {
 //   service.stopCron(service.startCron());

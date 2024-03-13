@@ -1,38 +1,58 @@
-const { CronJob } = require('cron');
+// const { CronJob } = require('cron');
 // const { bot } = require('../main');
+const cron = require('node-cron');
 
 class Service {
-  // start CronJob
-  startCron(handler, cronTime = '* * * * * *') {
-    const job = new CronJob({
-      cronTime,
-      onTick: handler,
-      // onComplete: null,
-      start: true,
-      timeZone: 'Europe/Kyiv',
-    });
-
-    return job;
+  // start node-cron
+  startCron(handler, shedule) {
+    const pollShedule = cron.schedule(shedule, handler);
   }
 
-  // stop CronJob
-  // stopCron(job) {
-  //   job.stop()
-  // }
+  // stop node-cron
+  stopCron() {}
 
   pollCron(handler) {
-    this.startCron(handler, '1 * * * * *');
+    this.startCron(handler, '15 * * * * *');
   }
 
-  async pollInterval(handler) {
-    setInterval(async () => {
-      handler();
-    }, 10000);
+  async getPollsResults(ctx) {}
+
+  async createPollsForShedule(ctx) {
+    for (let i = 0; i < 1; i += 1) {
+      const res = await this.createPoll(ctx);
+      console.log(res);
+    }
   }
 
-  async createPoll(context) {
-    const ctx = await context;
-    return ctx;
+  // async pollInterval(handler) {
+  //   setInterval(() => {
+  //     handler();
+  //   }, 10000);
+  // }
+
+  async generatePollsSet(ctx) {
+    for (let i = 0; i < 3; i += 1) {
+      await this.createPoll(ctx);
+      await this.sleep(3000);
+    }
+  }
+
+  async sleep(time) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, time);
+    });
+  }
+
+  async createPoll(ctx) {
+    const res = await ctx.telegram.sendPoll(
+      ctx.message.chat.id,
+      'test',
+      ['1', '2'],
+      { is_anonymous: false },
+    );
+    return res;
   }
 }
 
