@@ -7,30 +7,18 @@ const BOT_TOKEN = config.BOT_TOKEN;
 const bot = new Telegraf(BOT_TOKEN);
 
 // With Cron & interval
-bot.command('startPoll', ctx => {
-  // service.pollCron(
-  service.pollInterval(
-    service.createPoll(
-      ctx.telegram.sendPoll(ctx.message.chat.id, 'test', ['1', '2']),
+bot.command('startCreatingPolls', ctx => {
+  service.pollCron(
+    service.pollInterval(() =>
+      service.createPoll(
+        ctx.telegram.sendPoll(ctx.message.chat.id, 'test', ['1', '2']),
+      ),
     ),
   );
-  // );
 });
 
-// With Cron
-// bot.command('createPoll', ctx => {
-//   service.pollCron(
-//     service.createPoll(
-//       ctx.telegram.sendPoll(ctx.message.chat.id, 'test', ['2', '3']),
-//     ),
-//   );
-// });
-
-// Without Cron
-// bot.command('createPoll', ctx => {
-//   service.createPoll(
-//     ctx.telegram.sendPoll(ctx.message.chat.id, 'test', ['2', '3']),
-//   );
+// bot.command('stopCreatingPolls', ctx => {
+//   service.stopCron(service.startCron());
 // });
 
 bot.launch(console.log('bot on work'));
