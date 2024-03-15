@@ -1,25 +1,27 @@
 const { Telegraf } = require('telegraf');
 const { service } = require('./services/service');
+const { votedUsers, unvotedUsers } = require('./pseudo-database/users');
 
 const config = require('./config/config');
 const BOT_TOKEN = config.BOT_TOKEN;
 
 const bot = new Telegraf(BOT_TOKEN);
 
-// With Cron & interval
 bot.command('startCreatingPolls', ctx => {
-  // service.startCron(() =>
-  service.createPollsForShedule(ctx);
-  // );
+  // for info
+  // service.pollCron(service.createPollsForShedule(ctx));
+
+  // to generate polls
+  service.pollCron(() => service.generatePollsSet(ctx));
 });
 
-// bot.command('getPollsResults', async ctx => {
-//   console.log(await ctx.message.chat.(-1002010719063));
-// });
+bot.command('getPollsResults', async ctx => {
+  service.getPollsResults(ctx, votedUsers, unvotedUsers);
+});
 
-// bot.command('stopCreatingPolls', ctx => {
-//   service.stopCron(service.startCron());
-// });
+bot.command('stopCreatingPolls', ctx => {
+  service.stopCron(service.startCron());
+});
 
 bot.launch(console.log('bot on work'));
 

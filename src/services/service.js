@@ -5,7 +5,7 @@ const cron = require('node-cron');
 class Service {
   // start node-cron
   startCron(handler, shedule) {
-    const pollShedule = cron.schedule(shedule, handler);
+    cron.schedule(shedule, handler);
   }
 
   // stop node-cron
@@ -15,7 +15,32 @@ class Service {
     this.startCron(handler, '15 * * * * *');
   }
 
-  async getPollsResults(ctx) {}
+  async getPollsResults(ctx, votedUsers, unvotedUsers) {
+    const destructVotedUsers = await votedUsers.map(user => {
+      const { firstName, lastName, username } = user;
+      return { firstName, lastName, username };
+    });
+    const destructUnvotedUsers = await unvotedUsers.map(user => {
+      const { firstName, lastName, username } = user;
+      return { firstName, lastName, username };
+    });
+
+    const votedUsersList = await this.formateResultToList(destructVotedUsers);
+    const unvotedUsersList = await this.formateResultToList(
+      destructUnvotedUsers,
+    );
+
+    await ctx.reply('Ті, хто голосував:');
+    await ctx.reply(votedUsersList);
+    await ctx.reply('Ті, хто не голосував:');
+    await ctx.reply(unvotedUsersList);
+  }
+
+  async formateResultToList(data) {
+    return data
+      .map(user => `${user.username}: ${user.firstName} ${user.lastName}`)
+      .join('\n');
+  }
 
   async createPollsForShedule(ctx) {
     for (let i = 0; i < 1; i += 1) {
