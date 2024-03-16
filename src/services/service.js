@@ -4,8 +4,8 @@ const cron = require('node-cron');
 
 class Service {
   // start node-cron
-  startCron(handler, shedule) {
-    cron.schedule(shedule, handler);
+  startCron(handler, schedule) {
+    cron.schedule(schedule, handler);
   }
 
   // stop node-cron
@@ -42,7 +42,7 @@ class Service {
       .join('\n');
   }
 
-  async createPollsForShedule(ctx) {
+  async createPollsForschedule(ctx) {
     for (let i = 0; i < 1; i += 1) {
       const res = await this.createPoll(ctx);
       console.log(res);

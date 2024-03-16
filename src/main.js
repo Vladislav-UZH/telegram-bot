@@ -8,10 +8,6 @@ const BOT_TOKEN = config.BOT_TOKEN;
 const bot = new Telegraf(BOT_TOKEN);
 
 bot.command('startCreatingPolls', ctx => {
-  // for info
-  // service.pollCron(service.createPollsForShedule(ctx));
-
-  // to generate polls
   service.pollCron(() => service.generatePollsSet(ctx));
 });
 
