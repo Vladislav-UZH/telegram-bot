@@ -1,5 +1,10 @@
 // const { CronJob } = require('cron');
 // const { bot } = require('../main');
+const { lessons } = require('../pseudo-database/lessons');
+const {
+  sheduleVariantOne,
+  sheduleVariantTwo,
+} = require('../pseudo-database/schedule');
 const cron = require('node-cron');
 
 class Service {
@@ -12,7 +17,7 @@ class Service {
   stopCron() {}
 
   pollCron(handler) {
-    this.startCron(handler, '15 * * * * *');
+    this.startCron(handler, '* * * * * *');
   }
 
   async getPollsResults(ctx, votedUsers, unvotedUsers) {
@@ -56,25 +61,23 @@ class Service {
   // }
 
   async generatePollsSet(ctx) {
-    for (let i = 0; i < 3; i += 1) {
-      await this.createPoll(ctx);
-      await this.sleep(3000);
+    const polls = [];
+    console.log(sheduleVariantOne[0]);
+    for (const lesson of sheduleVariantOne[0].lessons) {
+      const { poll } = await this.createPoll(ctx, lesson.name, [
+        "Wasn't",
+        'Was',
+      ]);
+      polls.push(poll);
     }
+    return polls;
   }
 
-  async sleep(time) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, time);
-    });
-  }
-
-  async createPoll(ctx) {
+  async createPoll(ctx, question, options = []) {
     const res = await ctx.telegram.sendPoll(
       ctx.message.chat.id,
-      'test',
-      ['1', '2'],
+      question,
+      options,
       { is_anonymous: false },
     );
     return res;

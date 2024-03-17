@@ -62,7 +62,7 @@ sheduleVariantOne.push(
 const mondayScheduleVTwo = new Schedule({
   day: 'monday',
   lessons: [lessons.english, lessons.algorithmizationLab],
-  variant: 1,
+  variant: 2,
 });
 
 const tuesdayScheduleVTwo = new Schedule({
@@ -72,7 +72,7 @@ const tuesdayScheduleVTwo = new Schedule({
     lessons.discreteLecture,
     lessons.discretePractice,
   ],
-  variant: 1,
+  variant: 2,
 });
 
 const wednesdayScheduleVTwo = new Schedule({
@@ -82,19 +82,19 @@ const wednesdayScheduleVTwo = new Schedule({
     lessons.algorithmizationLecture,
     lessons.physicsLecture,
   ],
-  variant: 1,
+  variant: 2,
 });
 
 const thursdayScheduleVTwo = new Schedule({
   day: 'thursday',
   lessons: [lessons.mathPractice, lessons.physicsLab],
-  variant: 1,
+  variant: 2,
 });
 
 const fridayScheduleVTwo = new Schedule({
   day: 'friday',
   lessons: [lessons.dataStructuresLab, lessons.computerGraphicsLab],
-  variant: 1,
+  variant: 2,
 });
 
 sheduleVariantTwo.push(
@@ -104,3 +104,5 @@ sheduleVariantTwo.push(
   thursdayScheduleVTwo,
   fridayScheduleVTwo,
 );
+
+module.exports = { sheduleVariantOne, sheduleVariantTwo };

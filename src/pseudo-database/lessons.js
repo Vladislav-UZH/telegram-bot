@@ -115,6 +115,4 @@ const lessons = {
   dataStructuresLab,
 };
 
-module.exports = {
-  lessons,
-};
+module.exports = { lessons };
