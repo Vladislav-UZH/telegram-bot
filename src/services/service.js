@@ -62,7 +62,7 @@ class Service {
 
   async generatePollsSet(ctx) {
     const polls = [];
-    console.log(sheduleVariantOne[0]);
+    // console.log(sheduleVariantOne[0]);
     for (const lesson of sheduleVariantOne[0].lessons) {
       const { poll } = await this.createPoll(ctx, lesson.name, [
         "Wasn't",
