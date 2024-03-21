@@ -3,25 +3,26 @@ const { SuperModel } = require('./super.model');
 const model = new SuperModel();
 
 const schema = {
+  owner: {
+    type: model.Schema.ObjectId,
+    ref: 'Voter',
+  },
   id: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
   },
-  firstName: {
+  question: {
     type: String,
     required: true,
   },
-  lastName: {
+  options: {
     type: String,
-    required: true,
-  },
-  username: {
-    type: String,
+    enum: ["Wasn't", 'Was'],
     required: true,
   },
 };
 
-const UserModel = model.create('user', schema);
+const PollModel = model.create('Poll', schema);
 
-module.exports = { UserModel };
+module.exports = { PollModel };

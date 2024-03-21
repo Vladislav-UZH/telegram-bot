@@ -1,5 +1,6 @@
 // const { CronJob } = require('cron');
 // const { bot } = require('../main');
+const { PollModel } = require('../models/Poll.model');
 const { lessons } = require('../pseudo-database/lessons');
 const {
   sheduleVariantOne,
@@ -61,14 +62,12 @@ class Service {
   // }
 
   async generatePollsSet(ctx) {
-    const polls = [];
-    // console.log(sheduleVariantOne[0]);
     for (const lesson of sheduleVariantOne[0].lessons) {
       const { poll } = await this.createPoll(ctx, lesson.name, [
         "Wasn't",
         'Was',
       ]);
-      polls.push(poll);
+      PollModel.create({ id: poll.id });
     }
     return polls;
   }
