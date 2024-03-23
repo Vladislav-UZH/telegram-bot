@@ -52,7 +52,6 @@ bot.command('results', async ctx => {
   async function checkPolls(origPolls) {
     for (const { id, question } of origPolls) {
       const students = getPollResults(id);
-      console.log('3123141413', students);
       await sendResult({ students, subject: question });
     }
   }
