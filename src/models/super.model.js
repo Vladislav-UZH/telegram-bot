@@ -34,4 +34,3 @@ class SuperModel {
 }
 
 module.exports = { SuperModel };
-handler;

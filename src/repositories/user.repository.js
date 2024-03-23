@@ -4,7 +4,5 @@ class UserRepository extends SuperRepository {
   constructor() {
     super('User');
   }
-
-  async getUserById(objId) {}
 }
-module.exports = { UserRepository };
+module.exports = { userRepository: new UserRepository() };

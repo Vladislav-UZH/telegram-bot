@@ -8,9 +8,8 @@ const schema = {
     ref: 'User',
   },
   pollId: {
-    type: Number,
+    type: BigInt,
     required: true,
-    unique: true,
   },
   voteResult: {
     type: String,

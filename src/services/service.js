@@ -1,11 +1,4 @@
-// const { CronJob } = require('cron');
-// const { bot } = require('../main');
-const { PollModel } = require('../models/Poll.model');
-const { lessons } = require('../pseudo-database/lessons');
-const {
-  sheduleVariantOne,
-  sheduleVariantTwo,
-} = require('../pseudo-database/schedule');
+const { pollRepository } = require('../repositories/poll.repository');
 const cron = require('node-cron');
 
 class Service {
@@ -51,35 +44,38 @@ class Service {
   async createPollsForschedule(ctx) {
     for (let i = 0; i < 1; i += 1) {
       const res = await this.createPoll(ctx);
-      console.log(res);
     }
   }
 
-  // async pollInterval(handler) {
-  //   setInterval(() => {
-  //     handler();
-  //   }, 10000);
-  // }
-
-  async generatePollsSet(ctx) {
-    for (const lesson of sheduleVariantOne[0].lessons) {
-      const { poll } = await this.createPoll(ctx, lesson.name, [
-        "Wasn't",
-        'Was',
-      ]);
-      PollModel.create({ id: poll.id });
-    }
-    return polls;
+  async createPoll(ctx, question = '', options = ['']) {
+    return ctx.telegram.sendPoll(ctx.message.chat.id, question, options, {
+      is_anonymous: false,
+    });
   }
 
-  async createPoll(ctx, question, options = []) {
-    const res = await ctx.telegram.sendPoll(
-      ctx.message.chat.id,
-      question,
-      options,
-      { is_anonymous: false },
-    );
-    return res;
+  async generatePollsSet(ctx, sheduleVariantArr = []) {
+    for (const lesson of sheduleVariantArr[0].lessons) {
+      await this.createLessonPoll(ctx, lesson.name);
+    }
+  }
+
+  async createLessonPoll(ctx, question) {
+    const OPTIONS = ["Wasn't", 'Was'];
+    const res = await this.createPoll(ctx, question, OPTIONS);
+
+    const { poll } = res;
+
+    console.log(poll);
+
+    const result = await pollRepository.create({
+      id: poll.id,
+      question: poll.question,
+      options: poll.options.map(obj => obj.text),
+    });
+
+    // console.log(result);
+
+    return result;
   }
 }
 

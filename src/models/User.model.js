@@ -3,8 +3,8 @@ const { SuperModel } = require('./super.model');
 const model = new SuperModel();
 
 const schema = {
-  id: {
-    type: String,
+  tgId: {
+    type: BigInt,
     required: true,
     unique: true,
   },

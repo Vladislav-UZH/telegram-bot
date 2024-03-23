@@ -10,7 +10,7 @@ class User {
 const student1 = new User({
   firstName: 'Бедя',
   lastName: 'Владислав',
-  username: '',
+  username: '@Sezostris',
 });
 const student2 = new User({
   firstName: 'Беллас',
@@ -20,7 +20,7 @@ const student2 = new User({
 const student3 = new User({
   firstName: 'Бобонич',
   lastName: 'Максим',
-  username: '',
+  username: '@Incstore13',
 });
 const student4 = new User({
   firstName: 'Боднарук',
@@ -30,7 +30,7 @@ const student4 = new User({
 const student5 = new User({
   firstName: 'Боровська',
   lastName: 'Владислава',
-  username: '',
+  username: '@Nasha0_3',
 });
 const student6 = new User({
   firstName: 'Бурч',
