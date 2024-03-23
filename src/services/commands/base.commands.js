@@ -1,3 +1,6 @@
+const { CronTime } = require('cron');
+const { startVote } = require('../service');
+
 class BaseCommands {
   constructor() {}
 
@@ -6,4 +9,4 @@ class BaseCommands {
   async info() {}
 }
 
-module.exports = new BaseCommands();
+// module.exports = new BaseCommands();
