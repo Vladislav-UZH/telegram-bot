@@ -1,21 +1,12 @@
-const { Telegraf } = require('telegraf');
-const { service } = require('./services/service');
 const { database } = require('./database/connect.database');
-const {
-  sheduleVariantOne,
-  sheduleVariantTwo,
-} = require('./pseudo-database/schedule');
-const {
-  userRepository,
-  voterRepository,
-  pollRepository,
-} = require('./repositories');
 
-const config = require('./config/config');
-const { students } = require('./pseudo-database/users');
-const BOT_TOKEN = config.BOT_TOKEN;
+const { bot } = require('./app');
 
-const bot = new Telegraf(BOT_TOKEN);
+require('./commands.js');
+
+// const BOT_TOKEN = config.BOT_TOKEN;
+
+// const bot = new Telegraf(BOT_TOKEN);
 
 // bot.command('registerUsers', async ctx => {
 //   try {
@@ -57,35 +48,35 @@ function formatePollAnswer(data) {
   };
 }
 
-bot.command('startVoting', async ctx => {
-  try {
-    const polls = await service.generatePollsSet(ctx, sheduleVariantTwo);
+// bot.command('startVoting', async ctx => {
+//   try {
+//     const polls = await service.generatePollsSet(ctx, sheduleVariantTwo);
 
-    bot.on('poll_answer', async ctx => {
-      console.log(ctx.pollAnswer);
-      const poll = ctx.pollAnswer;
-      const user = await userRepository.findOne({ tgId: poll.user.id });
-      await voterRepository.create({
-        // owner: user._id,
-        pollId: poll.poll_id,
-        voteResult: !poll.option_ids[0] ? "Wasn't" : 'Was',
-      });
-    });
-  } catch (e) {
-    console.log(e);
-  }
-  // {
-  //   poll_id: '5474159861426030117',
-  //   user: {
-  //     id: 2111054056,
-  //     is_bot: false,
-  //     first_name: 'Влад',
-  //     username: 'vlad_uzhgor',
-  //     language_code: 'uk'
-  //   },
-  //   option_ids: [ 0 ]
-  // }
-});
+//     bot.on('poll_answer', async ctx => {
+//       console.log(ctx.pollAnswer);
+//       const poll = ctx.pollAnswer;
+//       const user = await userRepository.findOne({ tgId: poll.user.id });
+//       await voterRepository.create({
+//         // owner: user._id,
+//         pollId: poll.poll_id,
+//         voteResult: !poll.option_ids[0] ? "Wasn't" : 'Was',
+//       });
+//     });
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   // {
+//   //   poll_id: '5474159861426030117',
+//   //   user: {
+//   //     id: 2111054056,
+//   //     is_bot: false,
+//   //     first_name: 'Влад',
+//   //     username: 'vlad_uzhgor',
+//   //     language_code: 'uk'
+//   //   },
+//   //   option_ids: [ 0 ]
+//   // }
+// });
 
 function getVotedUsers() {
   const votedUsers = results.map(vote => {
@@ -114,50 +105,49 @@ function getPollResults(pollId) {
   return students;
 }
 
-bot.command('results', async ctx => {
-  async function checkPolls(origPolls) {
-    for (const { id, question } of origPolls) {
-      const students = getPollResults(id);
-      await sendResult({ students, subject: question });
-    }
-  }
-  async function sendResult(result) {
-    const { students, subject } = result;
-    const attended = students.filter(student => {
-      return student.isAttend;
-    });
+// bot.command('results', async ctx => {
+//   async function checkPolls(origPolls) {
+//     for (const { id, question } of origPolls) {
+//       const students = getPollResults(id);
+//       await sendResult({ students, subject: question });
+//     }
+//   }
+//   async function sendResult(result) {
+//     const { students, subject } = result;
+//     const attended = students.filter(student => {
+//       return student.isAttend;
+//     });
 
-    const notAttended = students.filter(student => {
-      return !student.isAttend;
-    });
+//     const notAttended = students.filter(student => {
+//       return !student.isAttend;
+//     });
 
-    const serialized = [...attended, null, ...notAttended]
-      .map(student => {
-        if (!student) {
-          return `Не присутні: `;
-        }
-        return `${student.user.first_name} - @${student.user.username}`;
-      })
-      .join('\n');
+//     const serialized = [...attended, null, ...notAttended]
+//       .map(student => {
+//         if (!student) {
+//           return `Не присутні: `;
+//         }
+//         return `${student.user.first_name} - @${student.user.username}`;
+//       })
+//       .join('\n');
 
-    const template = `${subject} - присутні: \n ${serialized}`;
-    await ctx.reply(template);
-  }
+//     const template = `${subject} - присутні: \n ${serialized}`;
+//     await ctx.reply(template);
+//   }
 
-  await checkPolls(originalPolls);
-});
+//   await checkPolls(originalPolls);
+// });
 
 // bot.command('test', async ctx => {
 //   service.createPoll(ctx, 'test');
 // });
 
-bot.launch(console.log('bot on work'));
-
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
-
 async function execute() {
   await database.connect();
+  bot.start();
+
+  process.once('SIGINT', () => bot.stop('SIGINT'));
+  process.once('SIGTERM', () => bot.stop('SIGTERM'));
 }
 
 execute();

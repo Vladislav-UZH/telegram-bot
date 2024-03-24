@@ -41,7 +41,7 @@ class Service {
       .join('\n');
   }
 
-  async createPollsForschedule(ctx) {
+  async createPollsForSchedule(ctx) {
     for (let i = 0; i < 1; i += 1) {
       const res = await this.createPoll(ctx);
     }

@@ -17,7 +17,7 @@ const schema = {
   },
   options: {
     type: [{ type: String }],
-    enum: ["Wasn't", 'Was'],
+    // enum: ["Wasn't", 'Was'],
     required: true,
   },
 };

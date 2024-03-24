@@ -26,21 +26,20 @@ class Bot {
   }
 
   async registerCommand(command = '', handler) {
-    try {
-      await this._checkCommands(command);
+    // await this._checkCommands(command);
 
-      this.commands[command] = handler;
+    // this.commands[command] = handler;
 
-      this.instance.command(command, handler);
-    } catch (e) {
-      console.log(e);
-    }
+    this.instance.command(command, handler);
   }
 
   start() {
     this.instance.launch();
     console.log('Bot started successfully');
+
+    process.once('SIGINT', () => this.instance.stop('SIGINT'));
+    process.once('SIGTERM', () => this.instance.stop('SIGTERM'));
   }
 }
 
-// module.exports = { bot: new Bot({ BOT_TOKEN }) };
+module.exports = { bot: new Bot({ BOT_TOKEN }) };
